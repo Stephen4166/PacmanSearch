@@ -95,8 +95,7 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    
-
+    util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
@@ -134,7 +133,6 @@ def breadthFirstSearch(problem):
         temp = temp.parent
     ans.reverse()
     return ans
-
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
