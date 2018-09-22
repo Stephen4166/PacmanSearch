@@ -134,11 +134,7 @@ def breadthFirstSearch(problem):
         temp = temp.parent
     ans.reverse()
     return ans
-    
 
-
-    
-        
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
