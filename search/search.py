@@ -133,12 +133,13 @@ def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
     start_state = problem.getStartState()
+    visited = []
     root = Node(start_state, None, 0, None)
     pq = util.PriorityQueue()
     pq.push(root, 0)
     while not pq.isEmpty():
         node = pq.pop()
-        # print node.cost
+        visited.append(node.state)
         if problem.isGoalState(node.state):
             ans = []
             while node.parent is not None:
@@ -149,7 +150,7 @@ def uniformCostSearch(problem):
         successors = problem.getSuccessors(node.state)
         for triple in successors:
             newnode = Node(triple[0], triple[1], triple[2]+node.cost, node)
-            if triple[0] in problem._visitedlist:
+            if triple[0] in visited:
                 continue
             pq.update(newnode, newnode.cost)
     return []
@@ -165,12 +166,13 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
     start_state = problem.getStartState()
+    visited = []
     root = Node(start_state, None, 0, None)
     pq = util.PriorityQueue()
     pq.push(root, heuristic(start_state, problem))
     while not pq.isEmpty():
         node = pq.pop()
-        # print node.cost
+        visited.append(node.state)
         if problem.isGoalState(node.state):
             ans = []
             while node.parent is not None:
@@ -180,7 +182,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             return ans
         successors = problem.getSuccessors(node.state)
         for triple in successors:
-            if triple[0] in problem._visitedlist:
+            if triple[0] in visited:
                 continue
             newnode = Node(triple[0], triple[1], triple[2]+node.cost, node)
             heur = heuristic(newnode.state, problem)
