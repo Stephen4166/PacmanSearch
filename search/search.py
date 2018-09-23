@@ -102,26 +102,21 @@ def breadthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
     from game import Directions
     start_state = problem.getStartState()
+    visited = []
     queue = util.Queue()
     queue.push(Node(start_state, None, 0, None))
-    lastNode = None
     finalNode = None
     while not queue.isEmpty():
         tempN = queue.pop()
-
-        # # add last node poped as parent
-        # if lastNode:
-        #     tempN.parent = lastNode
-        # lastNode = tempN
-
+        if tempN.state in visited:
+            continue
+        else:
+            visited.append(tempN.state)
         # if we arrive
         if problem.isGoalState(tempN.state):
             finalNode = tempN
             break
         for triple in problem.getSuccessors(tempN.state):
-            # if child is visited, skip
-            if triple[0] in problem._visitedlist:
-                continue
             node = Node(triple[0], triple[1], triple[2], tempN)
             queue.push(node)
         
@@ -137,7 +132,27 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    start_state = problem.getStartState()
+    root = Node(start_state, None, 0, None)
+    pq = util.PriorityQueue()
+    pq.push(root, 0)
+    while not pq.isEmpty():
+        node = pq.pop()
+        # print node.cost
+        if problem.isGoalState(node.state):
+            ans = []
+            while node.parent is not None:
+                ans.append(node.action)
+                node = node.parent
+            ans.reverse()
+            return ans
+        successors = problem.getSuccessors(node.state)
+        for triple in successors:
+            newnode = Node(triple[0], triple[1], triple[2]+node.cost, node)
+            if triple[0] in problem._visitedlist:
+                continue
+            pq.update(newnode, newnode.cost)
+    return []
 
 def nullHeuristic(state, problem=None):
     """
@@ -149,7 +164,28 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    start_state = problem.getStartState()
+    root = Node(start_state, None, 0, None)
+    pq = util.PriorityQueue()
+    pq.push(root, heuristic(start_state, problem))
+    while not pq.isEmpty():
+        node = pq.pop()
+        # print node.cost
+        if problem.isGoalState(node.state):
+            ans = []
+            while node.parent is not None:
+                ans.append(node.action)
+                node = node.parent         
+            ans.reverse()
+            return ans
+        successors = problem.getSuccessors(node.state)
+        for triple in successors:
+            if triple[0] in problem._visitedlist:
+                continue
+            newnode = Node(triple[0], triple[1], triple[2]+node.cost, node)
+            heur = heuristic(newnode.state, problem)
+            pq.update(newnode, newnode.cost+heur)
+    return []
 
 
 # Abbreviations
