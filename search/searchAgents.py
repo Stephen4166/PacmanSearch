@@ -489,7 +489,7 @@ def foodHeuristic(state, problem):
     heuristic = 0
     foodGridList = foodGrid.asList()
     for foodHeuristic in foodGridList:
-        heuristic = abs(position[0]-foodHeuristic[0]) + abs(position[1]-foodHeuristic[1])
+        heuristic = max(heuristic, abs(position[0]-foodHeuristic[0]) + abs(position[1]-foodHeuristic[1]))
     return heuristic
 
 class ClosestDotSearchAgent(SearchAgent):
